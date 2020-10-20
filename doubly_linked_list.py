@@ -41,12 +41,84 @@ class DoublyLinkedList:
             print(cur.data)
             cur = cur.next
 
+    def add_after_node(self, key, data):
+        cur = self.head
+        while cur:
+            if cur.next is None and cur.data == key:
+                self.append(data)
+                return
+            elif cur.data == key:
+                new_node = Node(data)
+                nxt = cur.next
+                cur.next = new_node
+                new_node.next = nxt
+                new_node.prev = cur
+                nxt.prev = new_node
+            cur = cur.next
+
+    def add_before_node(self, key, data):
+        cur = self.head
+        while cur:
+            if cur.prev is None and cur.data == key:
+                self.prepend(data)
+                return
+            elif cur.data == key:
+                new_node = Node(data)
+                prev = cur.prev
+                prev.next = new_node
+                cur.prev = new_node
+                new_node.next = cur
+                new_node.prev = prev
+            cur = cur.next
+
+    def delete(self, key):
+        cur = self.head
+        while cur:
+            if cur.data == key and cur == self.head:
+                # Case 1:
+                if not cur.next:
+                    cur = None
+                    self.head = None
+                    return
+                
+                # Case 2:
+                else:
+                    nxt = cur.next
+                    cur.next = None
+                    nxt.prev = None
+                    cur = None
+                    self.head = nxt
+                    return
+
+            elif cur.data == key:
+                # Case 3:
+                if cur.next:
+                    nxt = cur.next
+                    prev = cur.prev
+                    prev.next = nxt
+                    nxt.prev = prev
+                    cur.next = None
+                    cur.prev = None
+                    cur = None
+                    return
+                
+                # Case 4:
+                else:
+                    prev = cur.prev
+                    prev.next = None
+                    cur.prev = None
+                    cur = None
+                    return
+        cur = cur.next
+
+
+
 dllist = DoublyLinkedList()
-dllist.append(4)
-dllist.prepend(3)
-dllist.append(5)
+dllist.append(1)
 dllist.append(2)
-dllist.append(0)
-dllist.prepend(1)
+dllist.append(3)
+dllist.append(4)
+
+dllist.delete(1)
 
 dllist.print_list()
